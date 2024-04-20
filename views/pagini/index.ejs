@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <%- include("../fragmente/head.ejs") %>
+
+        <title>Dolce Crostata</title>
+        <meta name="keywords" content="Dolce Crostata, easy baking, desserts, patisserie, beginner baking, recipe">
+        <meta name="description" content="Welcome to the Dolce Crostata recipe website. Discover delicious 
+                                            and easy to follow recipes, videos and more">
+        
+    </head>
+    <body>
+
+        <%- include("../fragmente/header.ejs") %>
+
+        <main id="main">
+            <div id="grid-pagina">
+                <section id="introduction">
+                    <h2>Welcome to <b>Dolce Crostata</b>!</h2>
+                    <p>IP: <%- locals.ip %></p>
+                    <p>Here you'll find a sweet and delicious collection of recipes to satisfy your sweet tooth.</p>
+                    <p>This website is designed to make it easy for you to find the perfect desserts for any occasion. 
+                        Whether you're hosting a party, celebrating a special event, or just looking for a sweet treat to enjoy, 
+                        we have you covered.</p>
+                    <p>Here you can find a wide range of desserts, including cookies, cupcakes, brownies, cheesecakes, patisserie, ice creams, 
+                        and more. Each recipe comes with step-by-step instructions, helpful tips, 
+                        and mouth-watering photos to guide you through the process.</p>
+                    <p>Whether you're a beginner or an experienced baker, <b>Dolce Crostata</b> has everything you need to make your next 
+                        sweet creation a success. So, grab your apron and let's get baking!</p>
+                
+                    <hr class="prajituri"/>
+                    <div id="container-video">
+                        <!--<img class="cevapoza" src="resurse/imagini/cevapoza.png" alt="cevapoza">-->
+                        <div id="centrare-video">
+                            <div id="clip-video">
+                                <div id="stil-video">
+                                    <video width="320" height="240" poster="resurse/imagini/video/poster.jpg" preload="metadata" playsinline autoplay loop muted>
+                                        <source src="resurse/imagini/video/video.mp4" type="video/mp4">
+                                        <source src="resurse/imagini/video/video.webm" type="video/webm">
+                                        <track kind="subtitles" label="Română" srclang="ro" src="resurse/imagini/video/subtitles-ro.vtt" default>
+                                        <track kind="subtitles" label="English" srclang="en" src="resurse/imagini/video/subtitles-en.vtt">
+                                    </video>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="about-author">
+                        <h2>About the author</h2>
+                        <p>My name is Mirela and I am a college student who is passionate about baking. 
+                            I am currently studying computer science and hope that one day I will be able to merge my passion for 
+                            baking with the programming skills.
+                        </p>
+                </section>
+                
+                <section id="name-expl">
+                        <h2>What does <b>Dolce Crostata</b> mean?</h2>
+                        <p><dfn>Dolce</dfn> means sweet in Italian.</p> 
+                        <p><dfn>Crostata</dfn> is an Italian baked tart or pie.</p>                    
+                </section>
+
+                <section id="downloadable">
+                        <p>Click on the image to download it:</p>
+                            <a href="resurse/imagini/tarta.png" download="w3logo">
+                              <img src="resurse/imagini/tarta.png" alt="W3Schools">
+                            </a>
+                    
+                </section>   
+            
+                <section id="bakingworkshop">
+                    <h2>Baking Workshop</h2>
+                    <p>
+                        <i class="fa-sharp fa-solid fa-stroopwafel fa-fw fa-spin"></i>
+                        What is this section you might ask. Well, this section consists of several basic elements for your desserts, such as:
+                    </p>
+                    <ul>
+                        <li>Shortcrust Pastry</li>
+                        <li>Puff pastry</li>
+                        <li>Chocolate Sponge Cake</li>
+                        <li>Tempered Chocolate</li>
+                    </ul>
+                </section>
+
+                <section id="faq"> 
+                    <h2>Frequently Asked Questions</h2>
+                    <details>
+                        <summary>Can I substitute ingredients in your recipes?</summary>
+                        <p>Yes! Here is a website where you can find some basic ingredient substitutions:</p>
+                        <a href="https://food.unl.edu/article/ingredient-substitutions">Basic Ingredient Substitutions</a>
+                    </details>
+                    <details>
+                        <summary>Can I make adjustments to the recipe to reduce the sugar or calorie content?</summary>
+                        <p>Yes! Although this might affect the texture of the desserts, you can alter the recipe to your liking.</p>
+                    </details>
+                    <details>
+                        <summary>Are the recipes on your website suitable for beginners?</summary>
+                        <p>Absolutely! Our website caters to all skill levels, including beginners. We have a wide range of recipes that are labeled as beginner-friendly, and they often come with detailed step-by-step instructions and helpful tips to guide you through the cooking process.</p>
+                    </details>
+                    <details>
+                        <summary>Can I contact the recipe authors for clarification or additional tips?</summary>
+                        <p>Absolutely! We encourage interaction and learning from each other. You can leave comments or questions directly on the recipe pages, and the authors or other community members can respond. This allows for a collaborative environment where you can seek clarification, share experiences, and exchange cooking tips.</p>
+                    </details>
+                </section>
+
+                <table id="table" style="overflow: auto;">
+                    <thead>
+                      <tr>
+                        <th>Recipe Name</th>
+                        <th>Servings</th>
+                        <th>Prep Time</th>
+                        <th>Cooking Time</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Classic Chocolate Cake</td>
+                        <td>10</td>
+                        <td>25 min + chilling</td>
+                        <td>25-30 min</td>
+                      </tr>
+                      <tr>
+                        <td>Hummingbird Cupcakes</td>
+                        <td>12</td>
+                        <td>25 min</td>
+                        <td>15-20 min</td>
+                      </tr>
+                      <tr>
+                        <td>Vanilla Macarons</td>
+                        <td>16</td>
+                        <td>20 min + cooling</td>
+                        <td>10-15 min</td>
+                      </tr>
+                      <tr>
+                        <td>Apple Pie</td>
+                        <td>6</td>
+                        <td>40 min + cooling</td>
+                        <td>50 min</td>
+                      </tr>
+                      <tr>
+                        <td>Key Lime Pie</td>
+                        <td>8</td>
+                        <td>30 min + cooling</td>
+                        <td>20 min</td>
+                      </tr>
+                      <tr>
+                        <td>Fudge Nut Muffins</td>
+                        <td>12</td>
+                        <td>20 min</td>
+                        <td>20-25 min</td>
+                      </tr>
+                    </tbody>
+                </table>
+
+
+                <section id="figura">
+                    <figure id="fig1" class="fg-img">
+                        <img src="resurse/imagini/cookie.png" alt="tarta">
+                        <figcaption>Nectarine Tart</figcaption> 
+                    </figure>
+                </section> 
+
+                <!--GALERIE STATICA-->
+                <section id="galerie-statica">
+                    <h2>Galerie</h2>
+                    <div id="grid-galerie">
+                        <% 
+                            var d = new Date();
+                            var oraCurenta = d.getHours();
+                            for (let imag of locals.imagini) {
+                                var timp = imag.timp.split("-");
+                                var startTime = parseInt(timp[0].split(":")[0]);
+                                var endTime = parseInt(timp[1].split(":")[0]);
+                                if ((oraCurenta >= startTime && oraCurenta < endTime) || (endTime < startTime && (oraCurenta >= startTime || oraCurenta < endTime))) { 
+                        %>
+                            <figure>
+                                <picture>
+                                    <source srcset="<%= imag.cale_imagine_mic %>" media="(max-width:700px)"/>
+                                    <source srcset="<%= imag.cale_imagine_mediu %>" media="(max-width:1200px)"/>
+                                    <img src="<%= imag.cale_imagine %>" alt="prajituri">
+                                </picture>
+                                <figcaption><%= imag.descriere %></figcaption>
+                            </figure>
+                        <% 
+                                } 
+                            } 
+                        %>
+
+                    </div>
+                </section>
+                
+
+                <!--CONTAINER IFRAME-->
+                <section id="retete">
+                    <div class="container-iframe">
+                        <div class="taburi-iframe">
+                            <a href="https://www.youtube.com/embed/EqU_jMyr2P8" target="ifr-video">Tres Leches Cake</a>
+                            <a href="https://www.youtube.com/embed/q8VFsAGDleo" target="ifr-video">Chocolate Babka</a>
+                            <a href="https://www.youtube.com/embed/KB0kltHtnBA" target="ifr-video">Chocolate from scratch</a>
+                        </div>
+                    
+                        <iframe name="ifr-video" width="560" height="315" border: "5px solid var(--roz)" src="https://www.youtube.com/embed/EqU_jMyr2P8"
+                          frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border: 5px solid var(--roz);"></iframe>
+                    </div>
+                </section>
+            </div>
+
+            <div id="watermark">
+                <h1>Watermark</h1>
+                <p>Ruka<br>Mirela</p>
+            </div>
+        </main>
+
+        <%- include("../fragmente/footer.ejs") %>
+        
+    </body>
+</html>

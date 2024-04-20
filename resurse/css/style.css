@@ -1,0 +1,134 @@
+html{
+    font-size: 35px;
+    font-family: "Stylish", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+body{
+    --crem: #EDC7B7;
+    --bej: #EEE2DC;
+    --gri: #BAB2B5;
+    --albastru: #123C69;
+    --roz: #AC3B61;
+
+    /*
+    --culoare-mov:#C886FF;
+    --roz-deschis:rgb(255,219,235);
+    --culoare-fundal:rgb(255,219,235);
+    --culoare-fundal-inchis:#C886FF;
+    --culoare-text:black;*/
+
+    --spatiere-pagina:50px;
+    --padding-sectiune:15px;
+    --padding-text: 20px;
+
+    background-color : var(--gri);
+    color: var(--albastru);
+    padding-left:var(--spatiere-pagina);
+    padding-right:var(--spatiere-pagina);
+    min-width:450px;
+    margin:0;
+}
+
+/*PENTRU CLASE SE PUNE PUNCt*/
+
+/*------stilizare diverse elemente------*/
+h1{
+    font-size: 2.5rem;
+}
+
+h2{
+    font-size: 2rem;
+    text-align: center;
+}
+
+h3{
+    font-size: 1.5rem;
+}
+
+figcaption{
+    text-align:center;
+}
+
+img{
+    width:100%;
+    max-width:1000px;
+    min-width:100px;
+}
+
+/*-----stilizare footer-----*/
+footer{
+    padding-left:var(--padding-text);
+    background-color: var(--roz);
+    color: var(--bej);
+    border: 1px solid var(--roz);
+    border-radius: 10px;
+    box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+    text-decoration: none;
+}
+
+#footer a {
+    text-decoration: none; /*scot liniuta*/
+    color: inherit; /*pastreaza culoarea dupa click*/
+}
+
+/*-----stilizare header-----*/
+header{
+    background-color: var(--roz);
+    color: var(--bej);
+    border: 1px solid var(--bej);
+    border-radius: 10px;
+    box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+}
+
+header img{
+    display: inline-block;
+    vertical-align: middle;
+    width:100%;
+    max-width: 1.5em;
+}
+  
+header h1{
+    display: inline-block;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+
+/*-----stilizare link-uri-----*/
+a {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 0%;
+}
+
+a.link:hover {
+    background-size: 100%;
+    color: var(--roz);
+    background-image: radial-gradient(#02979c85 40%, #8fd5cf00 80%, #8fd5cf00 100%);
+    background-size: 100%;
+    transition: all 1s linear;
+}
+
+a.link:active {
+    border: 1px solid red;
+    color: white;
+    transition: all 0.5s linear;
+}
+
+/*link-uri vizitate */
+a:visited {
+    color: var(--gri);
+}
+
+a.link[href^="http"]::before {
+    content: "⮳";
+    font-size: 1.5rem;
+    margin-right: 5px;
+}
+
+a.link[href^="http"]::before:hover{
+    color: white;
+    transition: color 0.35s linear;
+}

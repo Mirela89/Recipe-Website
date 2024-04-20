@@ -1,0 +1,102 @@
+@media print {
+
+    #grid-pagina {
+        font-size: 10px;
+        box-sizing: border-box;
+        page-break-before: always;
+        background-color: white;
+        /*
+			grid-template-rows: calc(100vh - 10px) 100vh 100vh 100vh;*/
+
+        display: block;
+    }
+
+    a{
+        text-decoration: none;
+        color: black;
+    }
+
+    html,
+    body{
+        width: 210mm;
+        overflow: visible !important;
+    }
+
+    #grid-pagina div:nth-child(5) {
+
+        page-break-before: always;
+    }
+
+    img{
+        display: none !important;
+    }
+
+    .taburi-iframe {
+        display: none;
+    }
+
+    #link-top{
+        display: none;
+    }
+
+    #retete{
+        display: none;
+    }
+
+    #banner {
+        position: fixed;
+        top:0.3em;
+        right:0.3em;
+        width:70%;
+    }
+
+    header {
+        border: none;
+    }
+
+    #grid-pagina>section {
+        border: none;
+    }
+
+    footer {
+        border: none;
+        page-break-before: always;
+    }
+
+    .meniu {
+        text-decoration: none;
+        break-after: auto;
+    }
+
+    .h1 {
+        position: fixed;
+        align-self: center;
+    }
+
+    #watermark {
+        display: contents;
+        width: 60%;
+        height: 10%;
+        text-align: center;
+        text-decoration-color:( black / 50%);
+    }
+    
+
+    @page{
+        size: A4 portrait;
+        margin-bottom: 2cm;
+        margin-top: 2cm;
+        counter-increment: page;
+    }
+
+    @page:right{
+        margin: 1cm 2cm;
+    }
+
+    @page:left{
+        margin: 2cm 1cm;
+    }
+}
+
+
+

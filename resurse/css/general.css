@@ -1,0 +1,111 @@
+/*-----stilizare buton link-top-----*/
+#link-top{
+    position:fixed;
+    bottom:0.3em;
+    opacity:0.5;
+    right:0.3em;
+    width:1.5rem;
+    box-sizing: border-box;
+    height:1.5rem;
+    line-height:3rem;
+    text-align:center;
+    border:1px solid var(--albastru);
+    background: var(--gri);
+    box-shadow:0px 0px 5px 5px var(--albastru) inset;
+    border-top-right-radius: 50%;
+    border-top-left-radius: 50%;
+    text-decoration: none;
+    font-size: 1.5rem;
+    transition: box-shadow 0.7s, transform 0.7s;
+    cursor: pointer;
+}
+
+#link-top:hover{
+    opacity:1;
+    box-shadow: 0px 0px 10px 10px grey inset;
+    transform:scale(1.1);
+}
+
+#triunghi{
+    margin-top: -0.4em;
+    display:inline-block;
+    color: var(--albastru);
+    text-decoration: none;
+    vertical-align: top;
+    transition: transform 0.5s;
+}
+ 
+#link-top:hover>#triunghi{
+    transform: scale(1.2);
+}
+
+
+/*-----stilizare tabel-----*/
+table{
+    width: 100%;
+    border-collapse: collapse;
+}
+  
+th, td{
+    padding: 12px;
+    text-align: left;
+    border: 1px solid var(--albastru);
+}
+  
+th{
+    background-color: var(--gri);
+    font-weight: bold;
+}
+  
+tbody tr:nth-child(even){
+    background-color: var(--crem);
+}
+
+tbody tr:nth-child(odd){
+    background-color: var(--bej);
+}
+  
+tbody tr:hover{
+    transition: background-color 0.7s ease-in-out;
+    background-color: var(--bej);
+}
+
+
+/*------stilizare-taburi------*/
+.taburi-iframe>a{
+    display: block;
+    border: 2px solid var(--roz);
+    border-left: 4px solid var(--roz);
+    background-color: var(--bej);
+    box-shadow: 0 0 10px var(--roz) inset; 
+    margin-bottom: 0.3em;
+    padding: 0.4em;
+    color: var(--roz);
+    text-decoration: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition:all 0.5s linear;
+    font-size: 0.5em;
+}
+
+.taburi-iframe{
+    display: flex;
+    flex-direction:column;
+    justify-content: baseline;
+}
+
+.container-iframe{
+    display: flex;
+    flex-direction: row;
+    width: 50%;
+}
+
+.container-iframe iframe{
+    width: 100%;
+}
+
+.taburi-iframe a:hover{
+    color:white;
+    background-image: none;
+    background-color: var(--roz);
+}

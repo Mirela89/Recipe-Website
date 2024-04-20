@@ -1,0 +1,89 @@
+{
+    "cale_galerie":"resurse/imagini/galerie",
+    "imagini": [
+        {
+            "cale_imagine":"bb-cheesecake.png",
+            "titlu":"Blueberry Cheesecake",
+            "descriere":"Blueberry Cheesecake",
+            "timp":"09:00-00:00"
+        },
+        {
+            "cale_imagine":"brownie.png",
+            "titlu":"Brownie",
+            "descriere":"Brownie",
+            "timp":"12:00-00:00"
+        },
+        {
+            "cale_imagine":"cake-pop.png",
+            "titlu":"Cake Pop",
+            "descriere":"Cake Pop",
+            "timp":"09:00-00:00"
+        },
+        {
+            "cale_imagine":"chocolate-cake.png",
+            "titlu":"Chocolate Cake",
+            "descriere":"Chocolate Cake",
+            "timp":"09:00-24:00"
+        },
+        {
+            "cale_imagine":"macaron.png",
+            "titlu":"Macaron",
+            "descriere":"Macaron",
+            "timp":"09:00-24:00"
+        },
+        {
+            "cale_imagine":"praj-televizor.png",
+            "titlu":"Prajitura Televizor",
+            "descriere":"Prajitura Televizor",
+            "timp":"09:00-24:00"
+        },
+        {
+            "cale_imagine":"rodie-cheesecake.png",
+            "titlu":"Pomegranate Cheesecake",
+            "descriere":"Pomegranate Cheesecake",
+            "timp":"09:00-24:00"
+        },
+        {
+            "cale_imagine":"shendetli.png",
+            "titlu":"Shendetli",
+            "descriere":"Shendetli",
+            "timp":"09:00-24:00"
+        },
+        {
+            "cale_imagine":"straciatella.png",
+            "titlu":"Straciatella Cheesecake",
+            "descriere":"Straciatella Cheesecake",
+            "timp":"09:00-24:00"
+        },
+        {
+            "cale_imagine":"amaretti.png",
+            "titlu":"Amaretti",
+            "descriere":"Amaretti",
+            "timp":"09:00-24:00"
+        },
+        {
+            "cale_imagine":"apricot-cake.png",
+            "titlu":"Apricot Cake",
+            "descriere":"Apricot Cake",
+            "timp":"09:00-24:00"
+        },
+        {
+            "cale_imagine":"bundt-cake.png",
+            "titlu":"Bundt Cake",
+            "descriere":"Bundt cake",
+            "timp":"09:00-24:00"
+        },
+        {
+            "cale_imagine":"cookies.png",
+            "titlu":"Iced Cookies",
+            "descriere":"Iced Cookies",
+            "timp":"09:00-24:00"
+        },
+        {
+            "cale_imagine":"jamaican-toto.png",
+            "titlu":"Jamaican Toto",
+            "descriere":"Jamaican Toto",
+            "timp":"09:00-24:00"
+        }
+    ]
+}

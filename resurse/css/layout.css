@@ -1,0 +1,116 @@
+#grid-pagina{
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(4,1fr);
+    grid-template-areas:"z-header z-header z-header z-header"
+                        "z-introduction z-introduction z-introduction z-introduction"
+                        "z-table z-table z-table z-table"
+                        "z-name-expl z-faq z-faq z-downloadable"
+                        "z-about-author z-figura  z-bakingworkshop z-bakingworkshop"
+                        "z-galerie-statica z-galerie-statica z-galerie-statica z-galerie-statica" /*adaugat*/
+                        "z-retete z-retete z-retete z-retete" /*adaugat*/
+                        "z-footer z-footer z-footer z-footer";
+    overflow: hidden;
+}
+
+#grid-pagina > *{
+    border: 3px solid var(--bej);
+    background: var(--bej);
+    padding:var(--padding-sectiune);
+    border-radius: 10px;
+}
+
+/*alias-uri pentru fiecare sectiune*/
+#header{
+    grid-area: z-header;
+}
+
+#introduction{
+    grid-area: z-introduction;
+}
+
+#about-author{
+    grid-area: z-about-author;
+}
+
+#name-expl{
+    grid-area: z-name-expl;
+}
+
+#downloadable{
+    grid-area: z-downloadable;
+}
+
+#bakingworkshop{
+    grid-area: z-bakingworkshop;
+}
+
+#table{
+    grid-area: z-table;
+}
+
+#faq{
+    grid-area: z-faq;
+}
+
+#figura{
+    grid-area: z-figura;
+}
+
+#footer{
+    grid-area: z-footer;
+}
+
+#retete{
+    grid-area: z-retete;
+}
+
+#galerie-statica{
+    grid-area: z-galerie-statica;
+}
+
+#watermark {
+    display: none;
+}
+
+/*afisare ecrane mici*/
+@media screen and (max-width:1200px){
+    html{
+        font-size: 15px;
+    }
+
+    #grid-pagina{
+        display: grid;
+        gap: 10px;
+        grid-template-columns: repeat(3,1fr);
+        grid-template-areas:"z-header z-header z-header"
+                        "z-introduction z-introduction z-introduction"
+                        "z-table z-table z-table"
+                        "z-name-expl z-faq z-downloadable"
+                        "z-bakingworkshop z-about-author z-fig1"
+                        "z-footer z-footer z-footer";
+        overflow: hidden;
+    }
+}
+
+@media screen and (max-width:800px){
+    html{
+        font-size: 12px;
+    }
+
+    #grid-pagina{
+        display: block;
+        gap: 10px;
+    }
+
+    #link-top{
+        transition: none;
+        transform: none;
+    }
+
+    #table{
+        overflow-x: scroll;
+    }
+}
+
+
