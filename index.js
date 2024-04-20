@@ -3,13 +3,16 @@ const express = require("express");
 const fs= require('fs');
 const path=require('path');
 const sharp=require('sharp');
-// const sass=require('sass');
+const sass=require('sass');
 // const ejs=require('ejs');
  
  
 obGlobal ={
     obErori:null,
-    obImagini:null
+    obImagini:null,
+    folderScss:path.join(__dirname,"resurse/scss"),
+    folderCss:path.join(__dirname,"resurse/css"),
+    folderBackup:path.join(__dirname,"backup")
 }
 
 app= express(); //primeste cereri de la clienti
@@ -180,6 +183,63 @@ function initImagini(){
     console.log(obGlobal.obImagini)
 }
 initImagini();
+
+//ETAPA 5 --- Compilare automata scss ---
+// Function to compile SCSS to CSS
+function compileazaScss(caleScss, caleCss){
+    console.log("cale:",caleCss);
+
+    // If 'caleCss' is not provided, generate a CSS file name based on the SCSS file name
+    if(!caleCss){
+        let numeFisExt=path.basename(caleScss);
+        let numeFis=numeFisExt.split(".")[0]  // Extract file name without extension
+        caleCss=numeFis+".css";// Add '.css' extension
+    }
+    
+    // If 'caleScss' is not an absolute path, make it absolute using 'obGlobal.folderScss'
+    if (!path.isAbsolute(caleScss))
+        caleScss=path.join(obGlobal.folderScss,caleScss )
+
+    // If 'caleCss' is not an absolute path, make it absolute using 'obGlobal.folderCss'
+    if (!path.isAbsolute(caleCss))
+        caleCss=path.join(obGlobal.folderCss,caleCss )
+    
+    // Create a backup directory for CSS files if it doesn't exist
+    let caleBackup=path.join(obGlobal.folderBackup, "resurse/css");
+    if (!fs.existsSync(caleBackup)) {
+        fs.mkdirSync(caleBackup,{recursive:true})
+    }
+    
+    // la acest punct avem cai absolute in caleScss si  caleCss
+    // Copy the existing CSS file to the backup directory if it exists
+    //TO DO
+    let numeFisCss=path.basename(caleCss);
+    if (fs.existsSync(caleCss)){
+        fs.copyFileSync(caleCss, path.join(obGlobal.folderBackup, "resurse/css",numeFisCss ))// +(new Date()).getTime()
+    }
+    rez=sass.compile(caleScss, {"sourceMap":true}); // Compile SCSS to CSS
+    fs.writeFileSync(caleCss,rez.css) // Write the compiled CSS to the target CSS file
+    //console.log("Compilare SCSS",rez);
+}
+//compileazaScss("a.scss");
+// Compile all SCSS files in the SCSS folder
+vFisiere=fs.readdirSync(obGlobal.folderScss);
+for( let numeFis of vFisiere ){
+    if (path.extname(numeFis)==".scss"){
+        compileazaScss(numeFis);
+    }
+}
+
+// Watch for changes in the SCSS folder
+fs.watch(obGlobal.folderScss, function(eveniment, numeFis){
+    console.log(eveniment, numeFis);
+    if (eveniment=="change" || eveniment=="rename"){
+        let caleCompleta=path.join(obGlobal.folderScss, numeFis);
+        if (fs.existsSync(caleCompleta)){
+            compileazaScss(caleCompleta);
+        }
+    }
+})
  
  
 app.listen(8080);

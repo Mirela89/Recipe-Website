@@ -16,8 +16,10 @@
   "author": "Ruka Mirela",
   "license": "ISC",
   "dependencies": {
+    "bootstrap": "^5.3.3",
     "ejs": "^3.1.9",
     "express": "^4.19.2",
+    "sass": "^1.75.0",
     "sharp": "^0.33.3"
   }
 }
