@@ -34,7 +34,7 @@ for(let folder of vect_foldere){
 }
  
 app.use("/resurse", express.static(__dirname+"/resurse"));
-
+app.use("/node_modules", express.static(__dirname+"/node_modules"));
 
 
 app.get(["/", "/index", "/home"],function(req, res){
