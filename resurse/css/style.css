@@ -12,13 +12,6 @@ body{
     --albastru: #123C69;
     --roz: #AC3B61;
 
-    /*
-    --culoare-mov:#C886FF;
-    --roz-deschis:rgb(255,219,235);
-    --culoare-fundal:rgb(255,219,235);
-    --culoare-fundal-inchis:#C886FF;
-    --culoare-text:black;*/
-
     --spatiere-pagina:50px;
     --padding-sectiune:15px;
     --padding-text: 20px;
@@ -30,6 +23,46 @@ body{
     min-width:450px;
     margin:0;
 }
+
+.dark {
+    --crem: #9E655F;
+    --bej: #A09C97;
+    --gri: #545254;
+    --albastru: #091C3A;
+    --roz: #600D26;
+
+    --spatiere-pagina: 50px;
+    --padding-sectiune: 15px;
+    --padding-text: 20px;
+
+    background-color: var(--gri);
+    color: var(--albastru);
+    padding-left: var(--spatiere-pagina);
+    padding-right: var(--spatiere-pagina);
+    min-width: 450px;
+    margin: 0;
+}
+
+.blue {
+    --crem: #AECBD7;
+    --bej: #C1D7E2; 
+    --gri:  #81A4CD;
+    --albastru:  #D5E8ED;
+    --roz: #B6D0E2; 
+
+    --spatiere-pagina: 50px;
+    --padding-sectiune: 15px;
+    --padding-text: 20px;
+
+    background-color: var(--gri);
+    color: var(--crem);
+    padding-left: var(--spatiere-pagina);
+    padding-right: var(--spatiere-pagina);
+    min-width: 450px;
+    margin: 0;
+}
+
+
 
 /*PENTRU CLASE SE PUNE PUNCt*/
 

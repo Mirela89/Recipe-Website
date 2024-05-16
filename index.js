@@ -4,16 +4,37 @@ const fs= require('fs');
 const path=require('path');
 const sharp=require('sharp');
 const sass=require('sass');
-// const ejs=require('ejs');
- 
+const ejs=require('ejs');
+
+const Client = require('pg').Client;
+
+var client= new Client({
+        database:"recipe_website",
+        user:"mirela",
+        password:"mirela",
+        host:"localhost",
+        port:5432});
+client.connect();
+
+client.query("select * from unnest(enum_range(null::categ_prajitura))", function(err, rez){
+    console.log(rez);
+})
  
 obGlobal ={
     obErori:null,
     obImagini:null,
     folderScss:path.join(__dirname,"resurse/scss"),
     folderCss:path.join(__dirname,"resurse/css"),
-    folderBackup:path.join(__dirname,"backup")
+    folderBackup:path.join(__dirname,"backup"),
+    optiuniMeniu: []
 }
+
+client.query("select * from unnest(enum_range(null::categ_prajitura))", function (err, rezTip) {
+    if (err)
+        console.log(err);
+    else
+        obGlobal.optiuniMeniu = rezTip.rows;
+});
 
 app= express(); //primeste cereri de la clienti
 console.log("Folder proiect", __dirname); //dirname este folder aplicatiei
@@ -36,11 +57,107 @@ for(let folder of vect_foldere){
 app.use("/resurse", express.static(__dirname+"/resurse"));
 app.use("/node_modules", express.static(__dirname+"/node_modules"));
 
+app.use("/*", function (req, res, next) {
+    res.locals.optiuniMeniu = obGlobal.optiuniMeniu;
+    /*if (req.session.utilizator) {
+        req.utilizator = res.locals.utilizator = new Utilizator(req.session.utilizator);
+    }*/
+    next();
+});
 
 app.get(["/", "/index", "/home"],function(req, res){
     //res.sendFile(__dirname+"/index.html")
     res.render("pagini/index", {ip: req.ip, imagini: obGlobal.obImagini.imagini});
 })
+
+//---------------------- PRODUSE ------------------------------------
+app.get("/produse", function (req, res) {
+    client.query("select * from unnest(enum_range(null::categ_prajitura))", function (err, rezCategorie) {
+        if (err) {
+            console.log(err)
+        }
+        else {
+            let conditieWhere = "";
+            if (req.query.tip) {
+                conditieWhere = ` where categorie='${req.query.tip}'`
+            }
+            client.query("select * from prajituri" +conditieWhere, function (err, rez) {
+                console.log(300)
+                if (err) {
+                    console.log(err);
+                    afisareEroare(res, 2);
+                }
+                else
+                /*--------------SCHIMBARE 
+                    res.render("pagini/produse", { produse: rez.rows, optiuni: rezCategorie.rows });*/
+                    client.query(
+                        "SELECT MIN(pret) AS min_price, MAX(pret) AS max_price FROM prajituri",
+                        function (err, rezPret) {
+                            if (err) {
+                                console.log(err);
+                                afisareEroare(res, 2);
+                            } else {
+                                client.query(
+                                    "SELECT distinct(unnest(ingrediente)) FROM prajituri",
+                                    function (err, rezIngrediente) {
+                                        if (err) {
+                                            console.log(err);
+                                            afisareEroare(res, 2);
+                                        } else {
+                                            client.query(
+                                                "SELECT * FROM unnest(enum_range(null::tipuri_produse))",
+                                                function (err, rezTip) {
+                                                    if (err) {
+                                                        console.log(err);
+                                                        afisareEroare(res, 2);
+                                                    } else {
+                                                        res.render("pagini/produse", {
+                                                            produse: rez.rows,
+                                                            optiuni: rezCategorie.rows,
+                                                            minPrice: rezPret.rows[0].min_price,
+                                                            maxPrice: rezPret.rows[0].max_price,
+                                                            ingrediente: rezIngrediente.rows.map((row) => row.unnest),
+                                                            tipuri: rezTip.rows,
+                                                        });
+                                                    }
+                                                }
+                                            );
+                                        }
+                                    }
+                                );
+                            }
+                        }
+                    ); 
+            })
+        }
+    })
+
+})
+
+
+client.query("select * from unnest(enum_range(null::categ_prajitura))",function(err,rezCategorie){
+	if(err)
+	{
+		console.log(err);
+	}
+	else{
+		obGlobal.optiuniMeniu=rezCategorie.rows;
+		console.log(obGlobal.optiuniMeniu);
+	}
+});
+
+app.get("/produs/:id", function(req, res){
+    client.query(`select * from prajituri where id=${req.params.id}`, function(err,rez){ //de pus tabel recipes
+        if(err){
+            console.log(err);
+            afisareEroare(res,2);
+        } else{
+            res.render("pagini/produs", {prod: rez.rows[0]} )
+        }
+    })
+
+})
+
 
 // trimiterea unui mesaj fix
 app.get("/cerere", function(req, res){

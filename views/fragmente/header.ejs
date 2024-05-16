@@ -1,6 +1,16 @@
+        <!--tema light/dark-->
+        <script src="/resurse/js/tema.js"></script>
+
         <header id="header">
             <img id="logo" src="./resurse/imagini/Logo.png" alt="DolceCrostata">
             <h1 id="title">Dolce Crostata</h1>
+            <select id="schimba-tema">
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+                <option value="blue">Blue</option>
+            </select>
+            
+            
         </header>
             <!--meniu-->
         <nav>
@@ -14,21 +24,22 @@
                         <div id="acasa">Home</div>
                         <div id="acasa-mediu"><span class="fas fa-regular fa-house"></span></div>
                         <ul>
-                            <li><a href="#introduction">Introduction</a></li>
-                            <li><a href="#faq">FAQ</a></li>
-                            <li><a href="#about-author">About author</a></li>
+                            <li><a href="/index#introduction">Introduction</a></li>
+                            <li><a href="/index#faq">FAQ</a></li>
+                            <li><a href="/index#about-author">About author</a></li>
                         </ul>
                     </li>
-                    <li>
-                        <a href="recipes.html">Recipes</a>
+
+                    <li><a href="/produse">Products</a>
                         <ul>
-                            <li><a href="cakes.html">Cakes</a></li>
-                            <li><a href="cookies.html">Cookies</a></li>
-                            <li><a href="cremes.html">Cremes</a></li>
+                          <% for (let opt of locals.optiuniMeniu) { %> <!--optiuniMeniu??-->
+                            <li><a href="/produse?tip=<%- opt.unnest %>"><%- opt.unnest %> </a></li>
+                          <% } %>
                         </ul>
-                    </li>    
-                    <li><a href="pastrybook.html">Pastry Book</a></li>
-                    <li><a href="account.html">Account</a></li>
-                    <li><a href="cart.html">Cart</a></li>
+                    </li>
+
+                    <li><a href="/pastrybook">Books</a></li>
+                    <li><a href="/account">Account</a></li>
+                    <li><a href="/cart">Cart</a></li>
                 </ul>
         </nav>
