@@ -32,14 +32,23 @@
 
                     <li><a href="/produse">Products</a>
                         <ul>
-                          <% for (let opt of locals.optiuniMeniu) { %> <!--optiuniMeniu??-->
+                          <% for (let opt of locals.optiuniMeniu) { %>
                             <li><a href="/produse?tip=<%- opt.unnest %>"><%- opt.unnest %> </a></li>
                           <% } %>
                         </ul>
                     </li>
 
-                    <li><a href="/pastrybook">Books</a></li>
+                    <!--<li><a href="/pastrybook">Books</a></li>-->
+
                     <li><a href="/account">Account</a></li>
+                    <li><a href="/inregistrare">Login</a></li>
                     <li><a href="/cart">Cart</a></li>
+
+                    <%- 
+                        include("submeniu-administrare.ejs") 
+                    %>
+                    <%- 
+                        include("submeniu-utilizator-logat.ejs") 
+                    %>
                 </ul>
         </nav>

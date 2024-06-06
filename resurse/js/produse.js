@@ -1,76 +1,88 @@
 window.addEventListener("load", function() {
     document.getElementById("filtrare").onclick = function() {
-        var inpNume = document.getElementById("inp-nume").value.toLowerCase().trim();
-        var descriptionText = document.getElementById("inp-cuvant-cheie").value.toLowerCase().trim();
-
-        var radioCalorii = document.getElementsByName("gr_rad");
-        var inpCalorii;
-        var tipuri = document.getElementsByName("gr_chck");
-
-        for (let rad of radioCalorii) {
-            if (rad.checked) {
-                inpCalorii = rad.value;
-                break;
-            }
-        }
-
-        var minCalorii, maxCalorii;
-        if (inpCalorii != "toate") {
-            var vCal = inpCalorii.split(":");
-            minCalorii = parseInt(vCal[0]);
-            maxCalorii = parseInt(vCal[1]);
-        }
-
-        var inpPret = parseFloat(document.getElementById("inp-pret").value);
-        var inpCateg = document.getElementById("inp-categorie").value.toLowerCase().trim();
         var produse = document.getElementsByClassName("produs");
 
-        var vTip = [];
+        //nume
+        var inpNume = document.getElementById("inp-nume").value.toLowerCase().trim();
+
+        //radio Gramaj
+        var radioGramaj = document.getElementsByName("gr_rad");
+        var inpGramaj;
+        for (let rad of radioGramaj) {
+                    if (rad.checked) {
+                        inpGramaj = rad.value;
+                        break;
+                    }
+        }
+
+        var minGramaj, maxGramaj;
+        if (inpGramaj != "toate") {
+            var vGramaj = inpGramaj.split(":");
+            minGramaj = parseInt(vGramaj[0]);
+            maxGramaj = parseInt(vGramaj[1]);
+        }
+
+        //checkbox tara
+        var vTara = [];
         var checkboxes = document.querySelectorAll('input[name="gr_chck"]:checked');
         checkboxes.forEach(function(checkbox) {
-            vTip.push(checkbox.value);
+            vTara.push(checkbox.value);
         });
+        
+        //range pret
+        var inpPret = parseFloat(document.getElementById("inp-pret").value);
 
+        //select simplu categorie
+        var inpCateg = document.getElementById("inp-category").value.toLowerCase().trim();
+        console.log("Selected Category:", inpCateg);
+
+        //datalist ingrediente
+        var inpIngredient = document.getElementById("i_datalist").value.toLowerCase().trim();
+
+        //select multiplu
         var selectedIngredients = [];
         var selectedOptions = document.getElementById("i_sel_multiplu").selectedOptions;
         for (var i = 0; i < selectedOptions.length; i++) {
             selectedIngredients.push(selectedOptions[i].value);
         }
 
+        //textare descriere
+        var descriptionText = document.getElementById("inp-cuvant-cheie").value.toLowerCase();
+
         for (let produs of produse) {
-            // TEXT
+            // TEXT 
             var valNume = produs.getElementsByClassName("val-nume")[0].innerHTML.toLowerCase().trim();
             var cond1 = valNume.startsWith(inpNume);
 
             // RADIO
-            var valCalorii = parseInt(produs.getElementsByClassName("val-calorii")[0].innerHTML);
-            var cond2 = (inpCalorii == "toate" || (minCalorii <= valCalorii && valCalorii < maxCalorii));
+            var valGramaj = parseInt(produs.getElementsByClassName("val-gramaj")[0].innerHTML);
+            var cond2 = (inpGramaj == "toate" || (minGramaj <= valGramaj && valGramaj < maxGramaj));
 
             // RANGE
             var valPret = parseFloat(produs.getElementsByClassName("val-pret")[0].innerHTML);
-            var cond3 = (valPret >= inpPret);
+            var cond3 = (valPret <= inpPret);
 
             // SELECT SIMPLU
-            var valCategorie = produs.getElementsByClassName("val-categorie")[0].innerHTML.toLowerCase().trim();
+            var valCategorie = produs.getElementsByClassName("val-category")[0].innerHTML.toLowerCase().trim();
             var cond4 = (inpCateg == valCategorie || inpCateg == "toate");
 
             // CHECKBOX
-            var valTip = produs.getElementsByClassName("val-tip")[0].innerHTML;
-            var cond5 = (vTip.includes(valTip));
+            var valTara = produs.getElementsByClassName("val-tara")[0].innerHTML;
+            var cond5 = (vTara.includes(valTara));
 
-            // SELECT MULTIPLU
+            // SELECT MULTIPLu
             var prod_ingrediente = produs.getElementsByClassName("val-ingrediente")[0].innerHTML;
-            var cond6 = selectedIngredients.every(function(ingredient) {
-                return !prod_ingrediente.includes(ingredient);
+            var cond6 = Array.from(selectedOptions).every(function(option) {
+                return !prod_ingrediente.includes(option.value);
             });
 
             // DATALIST
-            var selectedIngredientsArray = Array.from(selectedOptions).map(option => option.value);
-            var cond7 = selectedIngredientsArray.every(ingredient => !prod_ingrediente.includes(ingredient));
+            var valIngrediente = produs.getElementsByClassName("val-ingrediente")[0].innerHTML.toLowerCase().trim();
+            var cond7 = (inpIngredient === "" || valIngrediente.includes(inpIngredient));
 
             // TEXTARE
-            var valDescriere = produs.getElementsByClassName("val-descriere")[0].innerHTML.toLowerCase().trim();
-            var cond8 = valDescriere.includes(descriptionText);
+            var valDescriere = produs.getElementsByClassName("val-descriere")[0].innerHTML.toLowerCase();
+            var cond8 = valDescriere.includes(descriptionText); 
 
             if (cond1 && cond2 && cond3 && cond4 && cond5 && cond6 && cond7 && cond8) {
                 produs.style.display = "block";
@@ -79,15 +91,20 @@ window.addEventListener("load", function() {
             }
         }
     }
+    
 
+    //am adaugat o functie astfel incat sa se schimbe valoarea range-ului de pret in timp real
+    document.getElementById("inp-pret").onchange = function () {
+        document.getElementById("infoRange").innerHTML = `(${this.value})`;
+    }
     
 
     document.getElementById("resetare").onclick = function() {
         if (confirm("Sunteți sigur că doriți să resetați filtrele?")) {
             // Resetează toate inputurile la valorile implicite
             document.getElementById("inp-nume").value = ""; //TEXT
-            document.getElementById("inp-pret").value = document.getElementById("inp-pret").min; //RANGE
-            document.getElementById("inp-categorie").value = "toate"; //SELECT SIMPLU
+            document.getElementById("inp-pret").value = document.getElementById("inp-pret").max; //RANGE
+            document.getElementById("inp-category").value = "toate"; //SELECT SIMPLU
             document.getElementById("i_rad4").checked = true; //RADIO
             document.getElementById("i_sel_multiplu").selectedIndex = -1; //SELECT MULTIPLU
             var checkboxes = document.getElementsByName("gr_chck"); //CHECKBOX
@@ -153,7 +170,7 @@ window.addEventListener("load", function() {
 
         //afisez rezultatul
         let p = document.createElement("p");
-        p.innerHTML = "Suma: " + suma;
+        p.innerHTML = "Suma: " + suma.toFixed(2);
         p.id = "info-suma";
 
         //inserez paragraful dupa placeholder

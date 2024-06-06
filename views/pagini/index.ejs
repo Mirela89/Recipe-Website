@@ -17,6 +17,12 @@
             <div id="grid-pagina">
                 <section id="introduction">
                     <h2>Welcome to <b>Dolce Crostata</b>!</h2>
+                    <%- include("../fragmente/formular-login.ejs", 
+                        {
+                            utilizator:locals.utilizator,
+                            mesajLogin:locals.mesajLogin
+                        }) 
+                    %>
                     <p>IP: <%- locals.ip %></p>
                     <p>Here you'll find a sweet and delicious collection of recipes to satisfy your sweet tooth.</p>
                     <p>This website is designed to make it easy for you to find the perfect desserts for any occasion. 

@@ -2,7 +2,7 @@
 if (tema) {
     if (tema === "dark") {
         document.body.classList.add("dark");
-    } else if (tema === "blue") { // Add an else if statement for the blue theme
+    } else if (tema === "blue") { 
         document.body.classList.add("blue");
     }
 }
@@ -12,7 +12,7 @@ window.addEventListener("DOMContentLoaded", function() {
         if (document.body.classList.contains("dark")) {
             document.body.classList.remove("dark")
             localStorage.removeItem("tema");
-        } else if (document.body.classList.contains("blue")) { // Remove the blue theme if applied
+        } else if (document.body.classList.contains("blue")) {
             document.body.classList.remove("blue");
             localStorage.removeItem("tema");
         } else {

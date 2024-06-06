@@ -8,6 +8,13 @@ const ejs=require('ejs');
 
 const Client = require('pg').Client;
 
+const AccesBD= require("./module_proprii/accesbd.js");
+
+const formidable=require("formidable");
+const {Utilizator}=require("./module_proprii/utilizator.js")
+const session=require('express-session');
+const Drepturi = require("./module_proprii/drepturi.js");
+
 var client= new Client({
         database:"recipe_website",
         user:"mirela",
@@ -16,9 +23,9 @@ var client= new Client({
         port:5432});
 client.connect();
 
-client.query("select * from unnest(enum_range(null::categ_prajitura))", function(err, rez){
-    console.log(rez);
-})
+// client.query("select * from unnest(enum_range(null::categ_prajitura))", function(err, rez){
+//     console.log(rez);
+// })
  
 obGlobal ={
     obErori:null,
@@ -29,12 +36,23 @@ obGlobal ={
     optiuniMeniu: []
 }
 
-client.query("select * from unnest(enum_range(null::categ_prajitura))", function (err, rezTip) {
-    if (err)
+// client.query("select * from unnest(enum_range(null::tipuri_produse))", function(err, rezCategorie){
+//     if (err){
+//         console.log(err);
+//     }
+//     else{
+//         obGlobal.optiuniMeniu=rezCategorie.rows;
+//     }
+// });
+client.query("select * from unnest(enum_range(null::categorie))", function(err, rezCategorie){ 
+    if (err){
         console.log(err);
-    else
-        obGlobal.optiuniMeniu = rezTip.rows;
+    }
+    else{
+        obGlobal.optiuniMeniu = rezCategorie.rows; 
+    }
 });
+
 
 app= express(); //primeste cereri de la clienti
 console.log("Folder proiect", __dirname); //dirname este folder aplicatiei
@@ -42,11 +60,24 @@ console.log("Cale fisier", __filename);
 console.log("Director de lucru", process.cwd()); //process.cwd() e folder de unde rulam aplicatia
 //__dirname și process.cwd() nu sunt întotdeauna același lucru.
 
+app.use(session({ // aici se creeaza proprietatea session a requestului (pot folosi req.session)
+    secret: 'abcdefg',//folosit de express session pentru criptarea id-ului de sesiune
+    resave: true,
+    saveUninitialized: false
+}));
 
+app.use("/*",function(req, res, next){
+    res.locals.optiuniMeniu=obGlobal.optiuniMeniu;
+    res.locals.Drepturi=Drepturi;
+    if (req.session.utilizator){
+        req.utilizator=res.locals.utilizator=new Utilizator(req.session.utilizator);
+    }    
+    next();
+})
  
 app.set("view engine","ejs");
 
-vect_foldere=["temp", "temp1"];
+vect_foldere=["temp", "temp1", "backup", "poze_uploadate"];
 for(let folder of vect_foldere){
     let caleFolder = path.join(__dirname, folder)
     if(!fs.existsSync(caleFolder)){ //daca nu exista cale folder
@@ -55,58 +86,104 @@ for(let folder of vect_foldere){
 }
  
 app.use("/resurse", express.static(__dirname+"/resurse"));
+app.use("/poze_uploadate", express.static(__dirname+"/poze_uploadate"));
 app.use("/node_modules", express.static(__dirname+"/node_modules"));
-
-app.use("/*", function (req, res, next) {
-    res.locals.optiuniMeniu = obGlobal.optiuniMeniu;
-    /*if (req.session.utilizator) {
-        req.utilizator = res.locals.utilizator = new Utilizator(req.session.utilizator);
-    }*/
-    next();
-});
 
 app.get(["/", "/index", "/home"],function(req, res){
     //res.sendFile(__dirname+"/index.html")
     res.render("pagini/index", {ip: req.ip, imagini: obGlobal.obImagini.imagini});
 })
 
+//de verificat index.js
 //---------------------- PRODUSE ------------------------------------
+// app.get("/produse", function (req, res) {
+//     client.query("select * from unnest(enum_range(null::tipuri_produse))", function (err, rezTip) {
+//         if (err) {
+//             console.log(err);
+//         } else {
+//             let conditieWhere = "";
+//             if (req.query.tip) {
+//                 conditieWhere = ` where tip_produs='${req.query.tip}'`;
+//             }
+
+//             client.query("select * from prajituri" + conditieWhere, function (err, rez) {
+//                 if (err) {
+//                     console.log(err);
+//                     afisareEroare(res, 2);
+//                 } else {
+//                     client.query(
+//                         "SELECT MIN(pret) AS min_price, MAX(pret) AS max_price FROM prajituri",
+//                         function (err, rezPret) {
+//                             if (err) {
+//                                 console.log(err);
+//                                 afisareEroare(res, 2);
+//                             } else {
+//                                 client.query(
+//                                     "SELECT distinct(unnest(ingrediente)) FROM prajituri",
+//                                     function (err, rezIngrediente) {
+//                                         if (err) {
+//                                             console.log(err);
+//                                             afisareEroare(res, 2);
+//                                         } else {
+//                                             client.query(
+//                                                 "SELECT * FROM unnest(enum_range(null::categ_prajitura))",
+//                                                 function (err, rezCategorie) {
+//                                                     if (err) {
+//                                                         console.log(err);
+//                                                         afisareEroare(res, 2);
+//                                                     } else {
+//                                                         res.render("pagini/produse", {
+//                                                             produse: rez.rows,
+//                                                             optiuni: rezCategorie.rows,
+//                                                             minPrice: rezPret.rows[0].min_price,
+//                                                             maxPrice: rezPret.rows[0].max_price,
+//                                                             ingrediente: rezIngrediente.rows.map((row) => row.unnest),
+//                                                             tipuri: rezTip.rows,
+//                                                         });
+//                                                     }
+//                                                 }
+//                                             );
+//                                         }
+//                                     }
+//                                 );
+//                             }
+//                         }
+//                     );
+//                 }
+//             });
+//         }
+//     });
+// });
+
+
 app.get("/produse", function (req, res) {
-    client.query("select * from unnest(enum_range(null::categ_prajitura))", function (err, rezCategorie) {
+    client.query("select * from unnest(enum_range(null::categorie))", function (err, rezCategorie) {
         if (err) {
-            console.log(err)
-        }
-        else {
+            console.log(err);
+        } else {
             let conditieWhere = "";
-            if (req.query.tip) {
-                conditieWhere = ` where categorie='${req.query.tip}'`
+            if (req.query.category) {
+                conditieWhere = ` where category='${req.query.category}'`;
             }
-            client.query("select * from prajituri" +conditieWhere, function (err, rez) {
-                console.log(300)
+            client.query("select * from recipes" + conditieWhere, function (err, rez) {
                 if (err) {
                     console.log(err);
                     afisareEroare(res, 2);
-                }
-                else
-                /*--------------SCHIMBARE 
-                    res.render("pagini/produse", { produse: rez.rows, optiuni: rezCategorie.rows });*/
+                } else {
                     client.query(
-                        "SELECT MIN(pret) AS min_price, MAX(pret) AS max_price FROM prajituri",
-                        function (err, rezPret) {
+                        "SELECT MIN(pret) AS min_price, MAX(pret) AS max_price FROM recipes", function (err, rezPret) {
                             if (err) {
                                 console.log(err);
                                 afisareEroare(res, 2);
                             } else {
                                 client.query(
-                                    "SELECT distinct(unnest(ingrediente)) FROM prajituri",
-                                    function (err, rezIngrediente) {
+                                    "SELECT distinct(unnest(ingrediente)) FROM recipes", function (err, rezIngrediente) {
                                         if (err) {
                                             console.log(err);
                                             afisareEroare(res, 2);
                                         } else {
                                             client.query(
-                                                "SELECT * FROM unnest(enum_range(null::tipuri_produse))",
-                                                function (err, rezTip) {
+                                                "SELECT * FROM unnest(enum_range(null::tara_origine))", function (err, rezTara) {
                                                     if (err) {
                                                         console.log(err);
                                                         afisareEroare(res, 2);
@@ -117,7 +194,7 @@ app.get("/produse", function (req, res) {
                                                             minPrice: rezPret.rows[0].min_price,
                                                             maxPrice: rezPret.rows[0].max_price,
                                                             ingrediente: rezIngrediente.rows.map((row) => row.unnest),
-                                                            tipuri: rezTip.rows,
+                                                            tariOrigine: rezTara.rows,
                                                         });
                                                     }
                                                 }
@@ -127,36 +204,199 @@ app.get("/produse", function (req, res) {
                                 );
                             }
                         }
-                    ); 
-            })
+                    );
+                }
+            });
         }
-    })
-
-})
-
-
-client.query("select * from unnest(enum_range(null::categ_prajitura))",function(err,rezCategorie){
-	if(err)
-	{
-		console.log(err);
-	}
-	else{
-		obGlobal.optiuniMeniu=rezCategorie.rows;
-		console.log(obGlobal.optiuniMeniu);
-	}
+    });
 });
 
+// app.get("/produs/:id", function(req, res){
+//     client.query(`select * from prajituri where id=${req.params.id}`, function(err,rez){ //de pus tabel recipes
+//         if(err){
+//             console.log(err);
+//             afisareEroare(res,2);
+//         } else{
+//             res.render("pagini/produs", {prod: rez.rows[0]} )
+//         }
+//     })
+// })
+
 app.get("/produs/:id", function(req, res){
-    client.query(`select * from prajituri where id=${req.params.id}`, function(err,rez){ //de pus tabel recipes
+    client.query(`SELECT * FROM recipes WHERE id=${req.params.id}`, function(err, rezultat){ 
         if(err){
             console.log(err);
-            afisareEroare(res,2);
+            afisareEroare(res, 2);
         } else{
-            res.render("pagini/produs", {prod: rez.rows[0]} )
+            if (rezultat.rows.length > 0) { 
+                res.render("pagini/produs", {prod: rezultat.rows[0]} );
+            } else {
+                afisareEroare(res, 404, "Produsul nu a fost găsit", "Produsul cu ID-ul specificat nu există în baza de date.");
+            }
         }
-    })
+    });
+});
 
-})
+
+//-------------------------- Utilizatori ------------------------
+app.post("/inregistrare",function(req, res){
+    var username;
+    var poza;
+    var formular= new formidable.IncomingForm()
+    formular.parse(req, function(err, campuriText, campuriFisier ){//4
+        console.log("Inregistrare:",campuriText);
+
+
+        console.log(campuriFisier);
+        console.log(poza, username);
+        var eroare="";
+
+
+        // var utilizNou = creare utilizator
+        var utilizNou = new Utilizator()
+        try{
+            utilizNou.setareNume=campuriText.nume[0];
+            utilizNou.setareUsername=campuriText.username[0];
+            utilizNou.email=campuriText.email[0]
+            utilizNou.prenume=campuriText.prenume[0]
+           
+            utilizNou.parola=campuriText.parola[0];
+            utilizNou.culoare_chat=campuriText.culoare_chat[0];
+            utilizNou.poza= poza[0];
+            Utilizator.getUtilizDupaUsername(campuriText.username, {}, function(u, parametru ,eroareUser ){
+                if (eroareUser==-1){//nu exista username-ul in BD
+                    //TO DO salveaza utilizator
+                    utilizNou.salvareUtilizator()
+                }
+                else{
+                    eroare+="Mai exista username-ul";
+                }
+
+
+                if(!eroare){
+                    res.render("pagini/inregistrare", {raspuns:"Inregistrare cu succes!"})
+                   
+                }
+                else
+                    res.render("pagini/inregistrare", {err: "Eroare: "+eroare});
+            })
+           
+
+
+        }
+        catch(e){
+            console.log(e);
+            eroare+= "Eroare site; reveniti mai tarziu";
+            console.log(eroare);
+            res.render("pagini/inregistrare", {err: "Eroare: "+eroare})
+        }
+   
+
+
+
+
+
+
+    });
+    formular.on("field", function(nume,val){  // 1
+   
+        console.log(`--- ${nume}=${val}`);
+       
+        if(nume=="username")
+            username=val;
+    })
+    formular.on("fileBegin", function(nume,fisier){ //2
+        console.log("fileBegin");
+       
+        console.log(nume,fisier);
+        //TO DO adaugam folderul poze_uploadate ca static si sa fie creat de aplicatie
+        //TO DO in folderul poze_uploadate facem folder cu numele utilizatorului (variabila folderUser)
+        var folderUser = path.join(__dirname, "poze_uploadate", username)
+
+        if(!fs.existsSync(folderUser))
+            fs.mkdirSync(folderUser);
+       
+        fisier.filepath=path.join(folderUser, fisier.originalFilename)
+        poza=fisier.originalFilename;
+        //fisier.filepath=folderUser+"/"+fisier.originalFilename
+        console.log("fileBegin:",poza)
+        console.log("fileBegin, fisier:",fisier)
+
+
+    })    
+    formular.on("file", function(nume,fisier){//3
+        console.log("file");
+        console.log(nume,fisier);
+    });
+});
+
+app.post("/login",function(req, res){
+    /*TO DO
+        testam daca a confirmat mailul
+    */
+    var username;
+    console.log("ceva");
+    var formular= new formidable.IncomingForm()
+    
+
+    formular.parse(req, function(err, campuriText, campuriFisier ){
+        var parametriCallback= {
+            req:req,
+            res:res,
+            parola: campuriText.parola[0]
+        }
+        Utilizator.getUtilizDupaUsername (campuriText.username[0],parametriCallback, 
+            function(u, obparam, eroare ){ //proceseazaUtiliz
+            let parolaCriptata=Utilizator.criptareParola(obparam.parola)
+            if(u.parola== parolaCriptata && u.confirmat_mail){
+                u.poza=u.poza?path.join("poze_uploadate",u.username, u.poza):"";
+                obparam.req.session.utilizator=u;               
+                obparam.req.session.mesajLogin="Bravo! Te-ai logat!";
+                obparam.res.redirect("/index");
+                
+            }
+            else{
+                console.log("Eroare logare")
+                obparam.req.session.mesajLogin="Date logare incorecte sau nu a fost confirmat mailul!";
+                obparam.res.redirect("/index");
+            }
+        })
+    });
+    
+});
+// app.post("/login",function(req, res){
+//     var username;
+//     console.log("ceva");
+//     var formular= new formidable.IncomingForm()
+    
+    
+//     formular.parse(req, function(err, campuriText, campuriFisier ){
+//         var parametriCallback= {
+//             req:req,
+//             res:res,
+//             parola:campuriText.parola
+//         }
+
+//         Utilizator.getUtilizDupaUsername (campuriText.username[0],parametriCallback, 
+//             function(u, obparam ){ //proceseazaUtiliz
+//                 let parolaCriptata = Utilizator.criptareParola(obparam.parola)
+            
+//             if(u.parola == parolaCriptata){
+//                 u.poza=u.poza?path.join("poze_uploadate",u.username, u.poza):"";
+//                 obparam.req.session.utilizator=u;               
+//                 obparam.req.session.mesajLogin="Bravo! Te-ai logat!";
+//                 obparam.res.redirect("/index");
+                
+//             }
+//             else{
+//                 console.log("Eroare logare")
+//                 obparam.req.session.mesajLogin="Date logare incorecte sau nu a fost confirmat mailul!";
+//                 obparam.res.redirect("/index");
+//             }
+//         })
+//     });
+// });
+
 
 
 // trimiterea unui mesaj fix
