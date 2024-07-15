@@ -19,5 +19,10 @@ Tech Stack: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" ta
 ## A brief overview
 
 Home Page
+![Home Page](https://github.com/Mirela89/Recipe-Website/tree/main/preview/HomePage1.png)
+![Home Page](https://github.com/Mirela89/Recipe-Website/tree/main/preview/HomePage2.png)
+![Home Page](https://github.com/Mirela89/Recipe-Website/tree/main/preview/HomePage3.png)
 
+Products Page
+![Home Page](https://github.com/Mirela89/Recipe-Website/tree/main/preview/Products.png)
 Product Page
