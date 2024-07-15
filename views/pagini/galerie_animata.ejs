@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <title>Dolce Crostata</title>
+    <meta name="keywords" content="Dolce Crostata, easy baking, desserts, patisserie, beginner baking, recipe">
+    <meta name="description" content="Welcome to the Dolce Crostata recipe website. Discover delicious 
+        and easy to follow recipes, videos and more">
+    <%- include("../fragmente/head.ejs") %>
+</head>
+
+<body>
+    <%- include("../fragmente/header.ejs") %>
+        <main>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Unde libero odio nam commodi laborum minus
+                dicta officia quas voluptates! Ea deserunt eligendi libero. Quas praesentium, quibusdam animi dicta esse
+                tempore? Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laudantium assumenda beatae esse,
+                modi quasi ad molestias eos porro culpa enim quis minima saepe libero deserunt sequi doloribus eligendi.
+                Illum, dicta? Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eveniet laudantium accusantium
+                ex totam odio, odit a obcaecati dolor assumenda veniam dignissimos consectetur, asperiores recusandae
+                mollitia voluptatibus voluptas similique numquam cum!</p>
+
+            <div id="container-galerie-animata">
+                <div class="galerie_animata" id="galanim" style="--nrImg: <% locals.nrImagini %>">
+
+                    <% var i=0; %>
+                        <% for (let imag of locals.imagini) { %>
+                            <% i=i + 1; %>
+                                <% if(i> locals.nrImagini) { break; }%>
+                                    <% var nume_imag=imag.cale_imagine.split('\\'); %>
+                                        <% nume_imag=nume_imag[nume_imag.length - 1]; %>
+                                            <figure>
+                                                <picture>
+                                                    <source srcset="<%- imag.cale_imagine_mediu %>"
+                                                        media="(max-width:1000px)" />
+                                                    <img src="<%- imag.cale_imagine %>" alt=" imagine ">
+                                                </picture>
+                                                <figcaption><%-imag.descriere %></figcaption>
+                                            </figure>
+                                            <% } %>
+                </div>
+            </div>
+        </main>
+
+        <%- include("../fragmente/footer.ejs") %>
+</body>
+
+</html>

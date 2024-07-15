@@ -5,6 +5,8 @@ const path=require('path');
 const sharp=require('sharp');
 const sass=require('sass');
 const ejs=require('ejs');
+//const diacritics = require('diacritics');
+const { randomInt } = require("crypto");
 
 const Client = require('pg').Client;
 
@@ -94,7 +96,22 @@ app.get(["/", "/index", "/home"],function(req, res){
     res.render("pagini/index", {ip: req.ip, imagini: obGlobal.obImagini.imagini});
 })
 
-//de verificat index.js
+app.get("/galerie_animata", function (req, res) {
+    let nrImagini = randomInt(5, 11);
+    if (nrImagini % 2 != 0)
+        nrImagini++;
+
+    let fisScss = path.join(__dirname, "resurse/scss/galerie_animata.scss");
+    let liniiFisScss = fs.readFileSync(fisScss).toString().split('\n');
+
+    let stringImg = "$nrImg: " + nrImagini + ";";
+    liniiFisScss.shift();
+    liniiFisScss.unshift(stringImg);
+    fs.writeFileSync(fisScss, liniiFisScss.join('\n'))
+
+    res.render("pagini/galerie_animata", { imagini: obGlobal.obImagini.imagini, nrImagini: nrImagini });
+});
+
 //---------------------- PRODUSE ------------------------------------
 // app.get("/produse", function (req, res) {
 //     client.query("select * from unnest(enum_range(null::tipuri_produse))", function (err, rezTip) {
@@ -165,6 +182,7 @@ app.get("/produse", function (req, res) {
             if (req.query.category) {
                 conditieWhere = ` where category='${req.query.category}'`;
             }
+            
             client.query("select * from recipes" + conditieWhere, function (err, rez) {
                 if (err) {
                     console.log(err);
@@ -177,7 +195,7 @@ app.get("/produse", function (req, res) {
                                 afisareEroare(res, 2);
                             } else {
                                 client.query(
-                                    "SELECT distinct(unnest(ingrediente)) FROM recipes", function (err, rezIngrediente) {
+                                    "SELECT DISTINCT unnest(ingrediente) AS ingredient FROM recipes", function (err, rezIngrediente) {
                                         if (err) {
                                             console.log(err);
                                             afisareEroare(res, 2);
@@ -188,14 +206,45 @@ app.get("/produse", function (req, res) {
                                                         console.log(err);
                                                         afisareEroare(res, 2);
                                                     } else {
-                                                        res.render("pagini/produse", {
-                                                            produse: rez.rows,
-                                                            optiuni: rezCategorie.rows,
-                                                            minPrice: rezPret.rows[0].min_price,
-                                                            maxPrice: rezPret.rows[0].max_price,
-                                                            ingrediente: rezIngrediente.rows.map((row) => row.unnest),
-                                                            tariOrigine: rezTara.rows,
-                                                        });
+                                                        client.query(
+                                                            "SELECT * FROM unnest(enum_range(null::dificultate_desert))", function (err, rezDificultate) {
+                                                                if (err) {
+                                                                    console.log(err);
+                                                                    afisareEroare(res, 2);
+                                                                } else {
+                                                                    client.query(
+                                                                        "SELECT DISTINCT de_post FROM recipes", function (err, rezDePost) {
+                                                                            if (err) {
+                                                                                console.log(err);
+                                                                                afisareEroare(res, 2);
+                                                                            } else {
+                                                                                client.query(
+                                                                                    "SELECT MIN(gramaj) AS min_gramaj, MAX(gramaj) AS max_gramaj FROM recipes", function (err, rezGramaj) {
+                                                                                        if (err) {
+                                                                                            console.log(err);
+                                                                                            afisareEroare(res, 2);
+                                                                                        } else {
+                                                                                            res.render("pagini/produse", {
+                                                                                                produse: rez.rows,
+                                                                                                optiuni: rezCategorie.rows,
+                                                                                                minPrice: rezPret.rows[0].min_price,
+                                                                                                maxPrice: rezPret.rows[0].max_price,
+                                                                                                ingrediente: rezIngrediente.rows.map((row) => row.ingredient),
+                                                                                                tariOrigine: rezTara.rows,
+                                                                                                dificultati: rezDificultate.rows, //adaugat
+                                                                                                dePostOptions: rezDePost.rows, //adaugat
+                                                                                                minGramaj: rezGramaj.rows[0].min_gramaj,//adaugat
+                                                                                                maxGramaj: rezGramaj.rows[0].max_gramaj //adaugat
+                                                                                            });
+                                                                                        }
+                                                                                    }
+                                                                                );
+                                                                            }
+                                                                        }
+                                                                    );
+                                                                }
+                                                            }
+                                                        );
                                                     }
                                                 }
                                             );
@@ -210,6 +259,7 @@ app.get("/produse", function (req, res) {
         }
     });
 });
+
 
 // app.get("/produs/:id", function(req, res){
 //     client.query(`select * from prajituri where id=${req.params.id}`, function(err,rez){ //de pus tabel recipes
@@ -290,13 +340,6 @@ app.post("/inregistrare",function(req, res){
             console.log(eroare);
             res.render("pagini/inregistrare", {err: "Eroare: "+eroare})
         }
-   
-
-
-
-
-
-
     });
     formular.on("field", function(nume,val){  // 1
    
@@ -321,14 +364,13 @@ app.post("/inregistrare",function(req, res){
         //fisier.filepath=folderUser+"/"+fisier.originalFilename
         console.log("fileBegin:",poza)
         console.log("fileBegin, fisier:",fisier)
-
-
     })    
     formular.on("file", function(nume,fisier){//3
         console.log("file");
         console.log(nume,fisier);
     });
 });
+
 
 app.post("/login",function(req, res){
     /*TO DO
@@ -364,6 +406,7 @@ app.post("/login",function(req, res){
     });
     
 });
+
 // app.post("/login",function(req, res){
 //     var username;
 //     console.log("ceva");
@@ -507,41 +550,50 @@ function afisareEroare(res, _identificator, _titlu, _text, _imagine){
 }
 
 
-//GALERIE STATICA
+// ---------------------- GALERIE STATICA ----------------------
 function initImagini(){
+    // Citește conținutul fișierului galerie.json și îl convertește în string UTF-8
     var continut= fs.readFileSync(path.join(__dirname,"/resurse/json/galerie.json")).toString("utf-8");
 
-    obGlobal.obImagini=JSON.parse(continut);
-    let vImagini=obGlobal.obImagini.imagini;
+    obGlobal.obImagini=JSON.parse(continut); // Parsează stringul JSON în obiect JavaScript și îl stochează în obGlobal.obImagini
+    let vImagini=obGlobal.obImagini.imagini; // Extrage array-ul de imagini din obGlobal.obImagini
 
+    // Construiește calea absolută către folderul de galerie și subfolderele "mediu" și "mic"
     let caleAbs=path.join(__dirname,obGlobal.obImagini.cale_galerie);
     let caleAbsMediu=path.join(__dirname,obGlobal.obImagini.cale_galerie, "mediu");
     let caleAbsMic = path.join(__dirname, obGlobal.obImagini.cale_galerie, "mic");
 
+    // Verifică dacă subfolderul "mediu" există, dacă nu, îl creează
     if (!fs.existsSync(caleAbsMediu))
         fs.mkdirSync(caleAbsMediu);
+    // Verifică dacă subfolderul "mic" există, dacă nu, îl creează
     if (!fs.existsSync(caleAbsMic))
         fs.mkdirSync(caleAbsMic);
 
-    //for (let i=0; i< vErori.length; i++ )
+    // Parcurge fiecare imagine din array-ul vImagini
     for (let imag of vImagini){
+        // Desparte calea imaginii în numele fișierului și extensia acestuia
         [numeFis, ext]=imag.cale_imagine.split(".");//???
-        let caleFisAbs=path.join(caleAbs,imag.cale_imagine);
-        let caleFisMediuAbs=path.join(caleAbsMediu, numeFis+".webp");
-        let caleFisMicAbs = path.join(caleAbsMic, numeFis + ".webp");
 
-        sharp(caleFisAbs).resize(400).toFile(caleFisMediuAbs);
-        sharp(caleFisAbs).resize(200).toFile(caleFisMicAbs);
+        let caleFisAbs=path.join(caleAbs,imag.cale_imagine); // Construiește calea absolută către fișierul imaginii originale
+        let caleFisMediuAbs=path.join(caleAbsMediu, numeFis+".webp"); // Construiește calea absolută pentru versiunea redimensionată "mediu" a imaginii
+        let caleFisMicAbs = path.join(caleAbsMic, numeFis + ".webp"); // Construiește calea absolută pentru versiunea redimensionată "mic" a imaginii
 
+        sharp(caleFisAbs).resize(400).toFile(caleFisMediuAbs); // Redimensionează imaginea originală la 400px lățime și salvează rezultatul în calea caleFisMediuAbs
+        sharp(caleFisAbs).resize(200).toFile(caleFisMicAbs); // Redimensionează imaginea originală la 200px lățime și salvează rezultatul în calea caleFisMicAbs
+
+        // Actualizează obiectul imaginii cu calea relativă către imaginea redimensionată "mediu"
         imag.cale_imagine_mediu=path.join("/", obGlobal.obImagini.cale_galerie, "mediu",numeFis+".webp" )
         imag.cale_imagine_mic = path.join("/", obGlobal.obImagini.cale_galerie, "mic", numeFis + ".webp")
-        imag.cale_imagine=path.join("/", obGlobal.obImagini.cale_galerie, imag.cale_imagine)
+        imag.cale_imagine=path.join("/", obGlobal.obImagini.cale_galerie, imag.cale_imagine)  // Actualizează obiectul imaginii cu calea relativă către imaginea originală
     }
     console.log(obGlobal.obImagini)
 }
 initImagini();
 
-//ETAPA 5 --- Compilare automata scss ---
+
+
+//ETAPA 5 ---------------------- Compilare automata scss -------------------
 // Function to compile SCSS to CSS
 function compileazaScss(caleScss, caleCss){
     console.log("cale:",caleCss);
@@ -569,7 +621,6 @@ function compileazaScss(caleScss, caleCss){
     
     // la acest punct avem cai absolute in caleScss si  caleCss
     // Copy the existing CSS file to the backup directory if it exists
-    //TO DO
     let numeFisCss=path.basename(caleCss);
     if (fs.existsSync(caleCss)){
         fs.copyFileSync(caleCss, path.join(obGlobal.folderBackup, "resurse/css",numeFisCss ))// +(new Date()).getTime()
@@ -582,7 +633,7 @@ function compileazaScss(caleScss, caleCss){
 // Compile all SCSS files in the SCSS folder
 vFisiere=fs.readdirSync(obGlobal.folderScss);
 for( let numeFis of vFisiere ){
-    if (path.extname(numeFis)==".scss"){
+    if (path.extname(numeFis)==".scss"){ // Verifică dacă extensia fișierului este '.scss'
         compileazaScss(numeFis);
     }
 }
@@ -590,9 +641,9 @@ for( let numeFis of vFisiere ){
 // Watch for changes in the SCSS folder
 fs.watch(obGlobal.folderScss, function(eveniment, numeFis){
     console.log(eveniment, numeFis);
-    if (eveniment=="change" || eveniment=="rename"){
-        let caleCompleta=path.join(obGlobal.folderScss, numeFis);
-        if (fs.existsSync(caleCompleta)){
+    if (eveniment=="change" || eveniment=="rename"){ // Verifică dacă evenimentul este "change" (modificare) sau "rename" (redenumire)
+        let caleCompleta=path.join(obGlobal.folderScss, numeFis); // Construiește calea completă a fișierului care a fost modificat sau redenumit
+        if (fs.existsSync(caleCompleta)){ // Verifică dacă fișierul încă există la calea completă
             compileazaScss(caleCompleta);
         }
     }

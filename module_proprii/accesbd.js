@@ -9,17 +9,18 @@ const {Client, Pool}=require("pg");
 
 class AccesBD{
     static #instanta=null; //o proprietate statică numită instanta, care va conține unica instanță a clasei (Inițial are valoarea null)
-    static #initializat=false;
+    static #initializat=false; // Indicator dacă clasa a fost inițializată
 
     constructor() { 
         if(AccesBD.#instanta){ //un constructor care va arunca o eroare dacă deja a fost instanțiată clasa.
             throw new Error("Deja a fost instantiat");
         }
-        else if(!AccesBD.#initializat){
+        else if(!AccesBD.#initializat){ // Constructor care aruncă o eroare dacă clasa nu a fost inițializată corect
             throw new Error("Trebuie apelat doar din getInstanta; fara sa fi aruncat vreo eroare");
         }
     }
 
+    // Inițializează conexiunea locală la baza de date
     initLocal(){ //una sau mai multe metode de inițializare a bazei de date prin care se oferă datele de autentificare (utilizator, parola, baza de date, port). Aceste metode vor salva în proprietatea client obiectul corespunzător conexiunii prin care se realizează cererile către baza de date.
         this.client= new Client({
             database:"recipe_website",
@@ -35,6 +36,7 @@ class AccesBD{
         this.client.connect();
     }
 
+    // Returnează clientul de bază de date
     getClient(){// Se va scrie și un getter pentru client
         if(!AccesBD.#instanta ){
             throw new Error("Nu a fost instantiata clasa");
@@ -56,7 +58,8 @@ class AccesBD{
     */
 
 
-    //o metodă getInstanta() care creează o instanță, dacă nu a fost deja creată, și o atribuie variabilei statice instanta. în această metodă se va ințializa și conexiunea la baza de date. Metoda va returna o referință către instanță.
+    //o metodă getInstanta() care creează o instanță, dacă nu a fost deja creată, și o atribuie variabilei statice instanta. 
+    //în această metodă se va ințializa și conexiunea la baza de date. Metoda va returna o referință către instanță.
     static getInstanta({init="local"}={}){
         console.log(this);//this-ul e clasa nu instanta pt ca metoda statica
         if(!this.#instanta){ //daca nu exista instanta
@@ -106,7 +109,7 @@ class AccesBD{
      * @param {function} callback - o functie callback cu 2 parametri: eroare si rezultatul queryului
     */
 
-
+    // Metoda pentru executarea unui query de SELECT
     select({tabel="",campuri=[],conditiiAnd=[]} = {}, callback, parametriQuery=[]){
         let conditieWhere="";
         if(conditiiAnd.length>0)
@@ -121,7 +124,7 @@ class AccesBD{
         this.client.query(comanda,parametriQuery, callback)
     }
 
-
+    // Metoda asincronă pentru executarea unui query SELECT
     async selectAsync({tabel="",campuri=[],conditiiAnd=[]} = {}){
         let conditieWhere="";
         if(conditiiAnd.length>0)
@@ -140,7 +143,7 @@ class AccesBD{
         }
     }
 
-    
+    // Metoda pentru inserarea unei înregistrări în baza de date
     insert({tabel="",campuri={}} = {}, callback){
                 /*
         campuri={
@@ -177,6 +180,7 @@ class AccesBD{
     //     this.client.query(comanda,callback)
     // }
 
+    // Metoda pentru actualizarea unei înregistrări în baza de date
     update({tabel="",campuri={}, conditiiAnd=[]} = {}, callback, parametriQuery){
         let campuriActualizate=[];
         for(let prop in campuri)
@@ -189,6 +193,7 @@ class AccesBD{
         this.client.query(comanda,callback)
     }
 
+    // Metoda pentru actualizarea parametrizată a unei înregistrări în baza de date
     updateParametrizat({tabel="",campuri=[],valori=[], conditiiAnd=[]} = {}, callback, parametriQuery){
         if(campuri.length!=valori.length)
             throw new Error("Numarul de campuri difera de nr de valori")
@@ -216,6 +221,7 @@ class AccesBD{
     //     this.client.query(comanda,valori, callback)
     // }
 
+    // Metoda pentru ștergerea unei înregistrări din baza de date
     delete({tabel="",conditiiAnd=[]} = {}, callback){
         let conditieWhere="";
         if(conditiiAnd.length>0)
@@ -226,6 +232,7 @@ class AccesBD{
         this.client.query(comanda,callback)
     }
 
+    // Metoda pentru execuția unui query arbitrar
     query(comanda, callback){
         this.client.query(comanda,callback);
     }

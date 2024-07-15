@@ -36,6 +36,8 @@
                         and mouth-watering photos to guide you through the process.</p>
                     <p>Whether you're a beginner or an experienced baker, <b>Dolce Crostata</b> has everything you need to make your next 
                         sweet creation a success. So, grab your apron and let's get baking!</p>
+
+                    <p>Pentru mai multe imagini apăsați <a href="galerie_animata">aici</a></p>
                 
                     <hr class="prajituri"/>
                     <div id="container-video">
@@ -177,13 +179,21 @@
                     <h2>Galerie</h2>
                     <div id="grid-galerie">
                         <% 
+                            // Obținem ora curentă a serverului
                             var d = new Date();
                             var oraCurenta = d.getHours();
+
+                            // Iterăm prin fiecare imagine din lista locală (locals.imagini)
                             for (let imag of locals.imagini) {
+                                // Extragem intervalul de timp pentru imagine
                                 var timp = imag.timp.split("-");
                                 var startTime = parseInt(timp[0].split(":")[0]);
                                 var endTime = parseInt(timp[1].split(":")[0]);
-                                if ((oraCurenta >= startTime && oraCurenta < endTime) || (endTime < startTime && (oraCurenta >= startTime || oraCurenta < endTime))) { 
+
+                                // Verificăm dacă ora curentă se încadrează în intervalul specificat pentru fiecare imagine
+                                // Avem în vedere și cazul în care intervalul se întinde peste miezul nopții (endTime < startTime)
+                                if ((oraCurenta >= startTime && oraCurenta < endTime) || (endTime < startTime && 
+                                (oraCurenta >= startTime || oraCurenta < endTime))) { 
                         %>
                             <figure>
                                 <picture>

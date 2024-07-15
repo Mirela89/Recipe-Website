@@ -28,6 +28,7 @@ ul.meniu{
     animation-fill-mode:forwards;
     animation-timing-function:linear;
 }
+
 #ch-menu:checked+ul.meniu>li>div,#ch-menu:checked+ul.meniu>li>a{
     
     z-index: 2;

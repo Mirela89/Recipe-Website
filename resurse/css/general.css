@@ -96,7 +96,7 @@ tbody tr:hover{
 
 .container-iframe{
     display: flex;
-    flex-direction: row;
+    flex-direction:row;
     width: 50%;
 }
 

@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html  lang="ro">
     <head>
-        <meta name="description" content="Cofetaria Dulcelind ofera prajituri, torturi, produse de patiserie cu optiunea de achizitie online si livrare prin curier.">
-        <meta name="keywords" content="cofetarie, Dulcelind, prajituri, torturi, dulce, pateuri, produse">
+        <meta name="description" content="Welcome to the Dolce Crostata recipe website. Discover delicious 
+        and easy to follow recipes, videos and more">
+        <meta name="keywords" content="Dolce Crostata, easy baking, desserts, patisserie, beginner baking, recipe">
         
-        <title>Cofetăria Dulcelind - home</title>
-        <%- include("../fragmente/head") %>     
+        <title>Dolce Crostata - product</title>
+        <%- include("../fragmente/head") %>      
         <link href="/resurse/css/produs.css" type="text/css" rel="stylesheet" />
     </head>
     <body>
@@ -14,19 +15,22 @@
     <main>
         <section>
             <h2>Pagină produs</h2>
+
                 <article id="art-produs">
-                    <h3><span class="nume"><%- locals.prod.nume %></span></h3>
-                    <p>Pret: <span class="pret"><%- locals.prod.pret %> </span></p>
-                    <p>Descriere: <span class="descriere"><%- locals.prod.descriere %> </span></p>
-                    <p>Ingrediente: <span class="ingrediente"><%- locals.prod.ingrediente %> </span></p>
-                    <p>Calorii: <span class="calorii"><%- locals.prod.calorii %> </span></p>
-                    <p>Gramaj: <span class="gramaj"><%- locals.prod.gramaj %> </span></p>
-                    <p>Categorie: <span class="categorie"><%- locals.prod.categorie %> </span></p>
-                    <p>Pentru diabetici: <span class="pt_diabetici"><%- locals.prod.pt_diabetici %> </span></p>
-                    <p>Data adăugare: <span class="categorie"><%- locals.prod.data_adaugare %> </span></p>
+                    <h3 class="nume">Nume: <%- locals.prod.nume %></span></a></h3> 
+                    <p class="categorie">Categorie: <%- locals.prod.category %></span></p>
+                    <p class="descriere">Descriere:<%- locals.prod.descriere %></span></p>
+                    <p class="pret">Pret: <%- locals.prod.pret %></span></p>
+                    <p class="tara">Țară de origine: <%- locals.prod.country %></span></p>
+                    <p class="ingrediente">Ingrediente: <%- locals.prod.ingrediente %></span></p>
+                    <p class="gramaj">Gramaj: <%- locals.prod.gramaj %></span></p>
+                    
+                    <p class="dificultate">Dificultate: <%- locals.prod.dificultate %></span></p>
+                    <p class="de_post">Pentru diabetici: <%- prod.de_post ? 'Da' : 'Nu' %></span></p>
+                    <p>Data adăugare: <%- prod.data_adaugare %></span></p>
                     <figure class="imag-produs">
-                        <img  src="/resurse/imagini/produse/<%- locals.prod.imagine %>" alt="[imagine <%- locals.prod.nume %>]" />
-                    </figure>    
+                        <img src="/resurse/imagini/produse/<%- prod.imagine %>" alt="[imagine <%- prod.nume %>]" />
+                    </figure>
                 </article>
             
         </section>

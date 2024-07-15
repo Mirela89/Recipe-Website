@@ -1,0 +1,103 @@
+$nrImg: 8;
+$border-image: url('H:\facultate\AN 3\SEMESTRU 2\Tehnici Web\Proiect\resurse\imagini\galerie\straciatella.png') 30 round;
+$animation-duration: calc(2s * $nrImg);
+
+.galerie_animata {
+    margin-left: auto;
+    margin-right: auto;
+    border: 10px solid;
+    border-image: $border-image;
+    width: 400px;
+    height: 400px;
+    overflow: hidden;
+    position: relative;
+
+    figcaption {
+        position: absolute;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.7);
+        width: 100%;
+        text-align: center;
+        overflow: hidden;
+    }
+
+    figure {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        animation-name: gal_exemplu;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+        animation-fill-mode: forwards;
+        animation-duration: $animation-duration;
+        transform-origin: center;
+        clip-path: circle(100%);
+        transition: clip-path 1s ease-in-out, transform 1s ease-in-out, opacity 1s ease-in-out;
+
+        // Image inside figure
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    // Pause animation on hover
+    &:hover figure {
+        animation-play-state: paused;
+        cursor: pointer;
+    }
+}
+
+// Animation delay for each figure based on its index
+// @for $i from 0 through $nrImg {
+//     .galerie_animata figure:nth-child(#{$i}) {
+//         animation-delay: 1s * $i;
+//     }
+// }
+
+@for $i from 0 through $nrImg {
+    #galanim figure:nth-child(#{$i}) {
+        animation-delay: 2s * $i;
+    }
+}
+
+@keyframes gal_exemplu {
+    0% {
+        clip-path: circle(100%);
+        transform: rotate(0deg);
+        opacity: 1;
+    }
+    40% {
+        clip-path: circle(10%);
+        transform: rotate(0deg);
+        opacity: 1;
+    }
+    60% {
+        clip-path: circle(10%);
+        transform: rotate(180deg);
+        opacity: 0.5;
+    }
+    80% {
+        clip-path: circle(5%);
+        transform: rotate(360deg);
+        opacity: 0.2;
+    }
+    100% {
+        clip-path: circle(0%);
+        transform: rotate(360deg);
+        opacity: 0;
+    }
+}
+
+
+
+#container-galerie-animata {
+    border: 3px solid #000;
+    width: 400px;
+    height: 400px;
+    margin: auto;
+    position: relative;
+    overflow: hidden;
+}

@@ -107,12 +107,13 @@
                     <article class="produs">
                         <h3 class="nume">Nume: <a href="/produs/<%- prod.id %>"><span class="val-nume"><%- prod.nume %></span></a></h3> 
                         <div class="info-prod">
+                            <p class="hidden categorie">Categorie:<span class="val-category"><%- prod.category %></span></p>
                             <p class="hidden descriere">Descriere: <span class="val-descriere"><%- prod.descriere %></span></p>
                             <p class="pret">Pret: <span class="val-pret"><%- prod.pret %></span></p> 
                             <p class="hidden tara">Țară de origine: <span class="val-tara"><%- prod.country %></span></p> 
                             <p class="hidden ingrediente">Ingrediente: <span class="val-ingrediente"><%- prod.ingrediente %></span></p>
                             <p class="gramaj">Gramaj: <span class="val-gramaj"><%- prod.gramaj %></span></p>
-                            <p class="hidden categorie">Categorie:<span class="val-category"><%- prod.category %></span></p>
+                            
                             <p class="dificultate">Dificultate: <span class="val-dificultate"><%- prod.dificultate %></span></p> 
                         </div>
                         <figure>
@@ -126,6 +127,8 @@
                 <% } %>
             </div>
         </section>
+
+        <div id="pagination-controls"></div>
     </main>
 
     <%- include("../fragmente/footer") %>

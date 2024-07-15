@@ -36,8 +36,8 @@
 
 /*Randul 1*/
 #grid-galerie>figure:nth-child(1) {
-    grid-area: 1/1/2/2;
-  }
+    grid-area: 1/1/2/2; 
+}
   
 #grid-galerie>figure:nth-child(2) {
     grid-area: 1/2/2/3; 
@@ -91,13 +91,13 @@
 
 /*Tranzitie*/
 #grid-galerie figure:hover img {
-    transform: translateY(-15%) scale(1.3);
+    transform: translateY(-15%) scale(1.3); /* Translatează imaginea în sus cu 15% și mărește-o la 130% din dimensiunea inițială */
     transition: transform 1.25s ease;
 }
 
 #grid-galerie figure:hover figcaption {
     background-color: var(--roz);
-    color: #ffffff; 
+    color: #ffffff; /* Setează culoarea textului la alb */
     transition: background-color 1.25s ease, color 1.25s ease;
 }
 
@@ -105,13 +105,13 @@
 /*ecrane de dimensiune medie*/
 @media screen and (max-width: 1000px) {
     #grid-galerie {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr); /* Configurează grila pentru a avea 2 coloane de lățimi egale pe ecrane medii */
     }
 }
 
 /*ecrane mici*/
 @media screen and (max-width: 500px) {
     #grid-galerie {
-        grid-template-columns: repeat(1, 1fr);
+        grid-template-columns: repeat(1, 1fr); /* Configurează grila pentru a avea 1 coloană de lățime completă pe ecrane mici */
     }
 }
